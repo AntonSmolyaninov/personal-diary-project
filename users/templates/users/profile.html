@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block title %}Профиль{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-4">
+        <div class="card shadow text-center">
+            <div class="card-body">
+                {% if profile.avatar %}
+                    <img src="{{ profile.avatar.url }}" class="rounded-circle img-fluid mb-3" style="width: 150px;">
+                {% else %}
+                    <div class="bg-secondary rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 150px; height: 150px;">
+                        <i class="fas fa-user fa-5x text-white"></i>
+                    </div>
+                {% endif %}
+                <h4>{{ user.username }}</h4>
+                <p class="text-muted">{{ user.email }}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-8">
+        <div class="card shadow">
+            <div class="card-header bg-primary text-white">
+                <h5><i class="fas fa-info-circle"></i> Информация</h5>
+            </div>
+            <div class="card-body">
+                <p><strong>Имя:</strong> {{ user.first_name|default:"Не указано" }}</p>
+                <p><strong>Фамилия:</strong> {{ user.last_name|default:"Не указано" }}</p>
+                <p><strong>Телефон:</strong> {{ profile.phone|default:"Не указан" }}</p>
+                <p><strong>Дата рождения:</strong> {{ profile.birth_date|default:"Не указана" }}</p>
+                <p><strong>О себе:</strong></p>
+                <p>{{ profile.bio|default:"Не указано"|linebreaks }}</p>
+                <a href="{% url 'profile_edit' %}" class="btn btn-primary">Редактировать</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
