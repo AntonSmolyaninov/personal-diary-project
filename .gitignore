@@ -1,0 +1,35 @@
+# Виртуальное окружение
+venv/
+
+# Python кэш
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Файлы сборки
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+
+# Переменные окружения
+.env
+
+# База данных
+db.sqlite3
+
+# Системные файлы
+.DS_Store
+Thumbs.db
+
+# Логи
+*.log
+
+# Статика и медиа
+staticfiles/
+media/
+
+.idea/
+
