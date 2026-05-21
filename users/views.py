@@ -1,5 +1,5 @@
 from django.contrib.auth.views import LoginView
-from django.views.generic import CreateView, UpdateView
+from django.views.generic import CreateView, UpdateView, DetailView
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import redirect
@@ -20,7 +20,7 @@ class RegisterView(CreateView):
     success_url = reverse_lazy('login')
 
 
-class ProfileView(LoginRequiredMixin, UpdateView):
+class ProfileView(LoginRequiredMixin, DetailView):
     """Просмотр профиля пользователя."""
     model = Profile
     template_name = 'users/profile.html'
@@ -33,6 +33,7 @@ class ProfileView(LoginRequiredMixin, UpdateView):
 class ProfileUpdateView(LoginRequiredMixin, UpdateView):
     """Редактирование профиля пользователя."""
     model = Profile
+    form_class = ProfileUpdateForm
     template_name = 'users/profile_edit.html'
     success_url = reverse_lazy('profile')
 

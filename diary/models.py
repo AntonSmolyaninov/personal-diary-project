@@ -1,5 +1,6 @@
 from django.contrib.auth.models import User
 from django.db import models
+from django.urls import reverse
 
 
 class Entry(models.Model):
@@ -42,4 +43,4 @@ class Entry(models.Model):
         return self.title
 
     def get_absolute_url(self) -> str:
-        return reversed("entry_detail", args=[str(self.id,)])
+        return reverse('entry_detail', args=[self.pk])

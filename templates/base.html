@@ -6,8 +6,91 @@
     <title>{% block title %}Личный дневник{% endblock %}</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* Устанавливаем минимальную высоту для html и body */
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Фон с изображением */
+        body {
+            background-image: url('/static/images/background.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            background-repeat: no-repeat;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Затемнение для читаемости текста */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: -1;
+        }
+
+        /* Основной контент растягивается */
+        .container {
+            flex: 1 0 auto;
+        }
+
+        /* Прозрачные карточки */
+        .card, .alert {
+            background-color: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(3px);
+            border: none;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Навигация */
+        .navbar {
+            background-color: rgba(33, 37, 41, 0.95) !important;
+        }
+
+        /* Футер — тёмный фон и белый текст */
+        footer {
+            background-color: rgba(33, 37, 41, 0.95) !important;
+            color: white !important;
+            text-align: center;
+            padding: 15px 0;
+            margin-top: 30px;
+            flex-shrink: 0;
+        }
+
+        footer small {
+            color: white !important;
+            opacity: 0.9;
+        }
+
+        footer a {
+            color: #ffc107 !important;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* Для мобильных устройств */
+        @media (max-width: 768px) {
+            footer {
+                padding: 10px 0;
+                font-size: 12px;
+            }
+        }
+    </style>
 </head>
 <body>
+    <!-- Навигация -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container">
             <a class="navbar-brand" href="{% url 'entry_list' %}">
@@ -42,7 +125,7 @@
                                 </a></li>
                                 <li><hr class="dropdown-divider"></li>
                                 <li>
-                                    <form action="{% url 'logout' %}" method="post" class="d-inline">
+                                    <form action="{% url 'logout' %}" method="post">
                                         {% csrf_token %}
                                         <button type="submit" class="dropdown-item text-danger">
                                             <i class="fas fa-sign-out-alt"></i> Выйти
@@ -68,6 +151,7 @@
         </div>
     </nav>
 
+    <!-- Основной контент -->
     <div class="container mt-4">
         {% if messages %}
             {% for message in messages %}
@@ -80,10 +164,12 @@
 
         {% block content %}{% endblock %}
     </div>
-
-    <footer class="bg-light text-center py-3 mt-5">
+    <footer>
         <div class="container">
-            <small>&copy; 2026 Личный дневник</small>
+            <small>
+                <i class="fas fa-copyright"></i> {% now "Y" %} Личный дневник.
+                <i class="fas fa-pen"></i> Записывайте свои мысли
+            </small>
         </div>
     </footer>
 

@@ -12,6 +12,32 @@ class CustomUserCreationForm(UserCreationForm):
         widget=forms.EmailInput(attrs={'class': 'form-control'})
     )
 
+    bio = forms.CharField(
+        label='О себе',
+        max_length=500,
+        required=False,
+        widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 3})
+    )
+
+    phone = forms.CharField(
+        label='Телефон',
+        max_length=20,
+        required=False,
+        widget=forms.TextInput(attrs={'class': 'form-control'})
+    )
+
+    birth_date = forms.DateField(
+        label='Дата рождения',
+        required=False,
+        widget=forms.DateInput(attrs={'class': 'form-control', 'type': 'date'})
+    )
+
+    avatar = forms.ImageField(
+        label='Аватар',
+        required=False,
+        widget=forms.FileInput(attrs={'class': 'form-control'})
+    )
+
     class Meta:
         model = User
         fields = ['username', 'email', 'password1', 'password2']
@@ -19,8 +45,24 @@ class CustomUserCreationForm(UserCreationForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         for field in self.fields.values():
-            field.widget.attrs.update({'class': 'form-control'})
+            if hasattr(field.widget, 'attrs'):
+                field.widget.attrs.update({'class': 'form-control'})
 
+    def save(self, commit=True):
+        """Сохраняет пользователя и профиль."""
+        user = super().save(commit=True)
+
+        profile = user.profile
+        profile.bio = self.cleaned_data.get('bio', '')
+        profile.phone = self.cleaned_data.get('phone', '')
+        profile.birth_date = self.cleaned_data.get('birth_date', None)
+
+        if self.cleaned_data.get('avatar'):
+            profile.avatar = self.cleaned_data.get('avatar')
+
+        profile.save()
+
+        return user
 
 class UserUpdateForm(forms.ModelForm):
     """Форма для редактирования основных данных пользователя."""

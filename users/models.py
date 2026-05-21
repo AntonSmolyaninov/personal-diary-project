@@ -31,7 +31,8 @@ class Profile(models.Model):
     phone = models.CharField(
         verbose_name='Телефон',
         max_length=20,
-        blank=True
+        blank=True,
+        null=True
     )
 
     birth_date = models.DateField(
