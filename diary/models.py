@@ -31,7 +31,7 @@ class Entry(models.Model):
     class Meta:
         ordering = ["-created_at"]
         verbose_name = "Запись"
-        verbose_name_plural = "Запись"
+        verbose_name_plural = "Записи"
 
     def __str__(self) -> str:
         return self.title
