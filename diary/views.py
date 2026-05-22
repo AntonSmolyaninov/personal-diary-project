@@ -1,8 +1,9 @@
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.db.models import Q
-from .models import Entry
+from django.views.generic import CreateView, DeleteView, DetailView, ListView, UpdateView
+
 from .forms import EntryForm
+from .models import Entry
 
 
 class EntryListView(LoginRequiredMixin, ListView):
@@ -12,22 +13,20 @@ class EntryListView(LoginRequiredMixin, ListView):
     """
 
     model = Entry
-    template_name = 'diary/entry_list.html'
-    context_object_name = 'entries'
+    template_name = "diary/entry_list.html"
+    context_object_name = "entries"
     paginate_by = 10
 
     def get_queryset(self):
         queryset = Entry.objects.filter(author=self.request.user)
-        query = self.request.GET.get('q')
+        query = self.request.GET.get("q")
         if query:
-            queryset = queryset.filter(
-                Q(title__icontains=query) | Q(content__icontains=query)
-            )
+            queryset = queryset.filter(Q(title__icontains=query) | Q(content__icontains=query))
         return queryset
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['search_query'] = self.request.GET.get('q', '')
+        context["search_query"] = self.request.GET.get("q", "")
         return context
 
 
@@ -35,7 +34,7 @@ class EntryDetailView(LoginRequiredMixin, UserPassesTestMixin, DetailView):
     """Детальный просмотр записи."""
 
     model = Entry
-    template_name = 'diary/entry_detail.html'
+    template_name = "diary/entry_detail.html"
 
     def test_func(self):
         return self.request.user == self.get_object().author
@@ -46,7 +45,7 @@ class EntryCreateView(LoginRequiredMixin, CreateView):
 
     model = Entry
     form_class = EntryForm
-    template_name = 'diary/entry_form.html'
+    template_name = "diary/entry_form.html"
 
     def form_valid(self, form):
         form.instance.author = self.request.user
@@ -58,7 +57,7 @@ class EntryUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 
     model = Entry
     form_class = EntryForm
-    template_name = 'diary/entry_form.html'
+    template_name = "diary/entry_form.html"
 
     def test_func(self):
         return self.request.user == self.get_object().author
@@ -68,8 +67,8 @@ class EntryDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     """Удаление записи."""
 
     model = Entry
-    template_name = 'diary/entry_confirm_delete.html'
-    success_url = '/'
+    template_name = "diary/entry_confirm_delete.html"
+    success_url = "/"
 
     def test_func(self):
         return self.request.user == self.get_object().author

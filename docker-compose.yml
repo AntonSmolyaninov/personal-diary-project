@@ -1,0 +1,47 @@
+services:
+  db:
+    image: postgres:15
+    container_name: diary_postgres
+    restart: always
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: diary_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 1234567890
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  web:
+    build: .
+    container_name: diary_web
+    restart: always
+    command: sh -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
+    volumes:
+      - .:/app
+      - static_volume:/app/staticfiles
+      - media_volume:/app/media
+    ports:
+      - "8000:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+    # Переопределяем HOST для Docker (вместо localhost)
+    environment:
+      NAME: diary_db
+      USER: postgres
+      PASSWORD: 1234567890
+      HOST: db
+      PORT: 5432
+      SECRET_KEY: "django-insecure-)b*#fo13gr*=0#xo!h3s8n1c-a&@uspv5-12)@9b4a)_gs(&p7"
+      DEBUG: "True"
+
+volumes:
+  postgres_data:
+  static_volume:
+  media_volume:

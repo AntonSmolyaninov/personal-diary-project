@@ -5,16 +5,10 @@ from django.urls import reverse
 
 class Entry(models.Model):
     """Модель записи дневника"""
-    title = models.CharField(
-        verbose_name="Заголовок",
-        max_length=50,
-        help_text="Краткий заголовок Вашей записи"
-    )
 
-    content = models.TextField(
-        verbose_name="Содержание",
-        help_text="Текст Вашей записи"
-    )
+    title = models.CharField(verbose_name="Заголовок", max_length=50, help_text="Краткий заголовок Вашей записи")
+
+    content = models.TextField(verbose_name="Содержание", help_text="Текст Вашей записи")
 
     created_at = models.DateTimeField(
         verbose_name="Дата создания",
@@ -31,11 +25,11 @@ class Entry(models.Model):
         on_delete=models.CASCADE,
         verbose_name="Автор",
         related_name="entries",
-        help_text="Пользователь, создавший запись"
+        help_text="Пользователь, создавший запись",
     )
 
     class Meta:
-        ordering = ['-created_at']
+        ordering = ["-created_at"]
         verbose_name = "Запись"
         verbose_name_plural = "Запись"
 
@@ -43,4 +37,4 @@ class Entry(models.Model):
         return self.title
 
     def get_absolute_url(self) -> str:
-        return reverse('entry_detail', args=[self.pk])
+        return reverse("entry_detail", args=[self.pk])
